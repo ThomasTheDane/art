@@ -1,0 +1,444 @@
+<!doctype html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+    <link rel="stylesheet" href="styles/main.css">
+    <!-- build:js scripts/vendor/modernizr.js -->
+    <script src="bower_components/modernizr/modernizr.js"></script>
+    <!-- endbuild -->
+
+    <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>
+    <script src="bower_components/jquery/jquery.js"></script>
+
+  </head>
+  <body>
+    <div class="container">
+        <h1>Social Media by Demographics</h1>
+        <h2>Twitter</h2>
+        <div id="twitterCharts" class="chartContainer"></div>
+
+        <h2>Tumblr</h2>
+        <div id="tumblrCharts" class="chartContainer"></div>
+
+        <h2>Facebook</h2>
+        <div id="facebookCharts" class="chartContainer"></div>
+
+        <h2>Instagrm</h2>
+        <div id="instagramCharts" class="chartContainer"></div>
+
+        <h2>LinkedIn</h2>
+        <div id="linkedInCharts" class="chartContainer"></div>
+
+        <h2>Pinterest</h2>
+        <div id="pinterestCharts" class="chartContainer"></div>
+
+
+        <h1>Demographic Breakdown (size dependent on total):</h1>
+        <h2>Gender</h2>
+        <div id="genderChart" class="chartContainer"></div>
+
+        <h2>Race</h2>
+        <div id="raceChart" class="chartContainer"></div>
+
+        <h2>Age</h2>
+        <div id="ageChart" class="chartContainer"></div>
+
+        <h2>Education</h2>
+        <div id="educationChart" class="chartContainer"></div>
+
+        <h2>Income</h2>
+        <div id="incomeChart" class="chartContainer"></div>
+
+        <h2>Location</h2>
+        <div id="locationChart" class="chartContainer"></div>
+
+    </div>        
+    <script>
+
+    window.addEventListener("load",run,false);
+
+    function run () {
+
+        data = [
+            { platform: "Tumblr", category: "Total", value: "10"},
+            { platform: "Tumblr", category: "Men", value: "10"},
+            { platform: "Tumblr", category: "Women", value: "11"},
+            { platform: "Tumblr", category: "White, Non-Hispanic", value: "9"},
+            { platform: "Tumblr", category: "Black, Non-Hispanic", value: "15"},
+            { platform: "Tumblr", category: "Hispanic", value: "15"},
+            { platform: "Tumblr", category: "18-29", value: "20"},
+            { platform: "Tumblr", category: "30-49", value: "11"},
+            { platform: "Tumblr", category: "50-64", value: "5"},
+            { platform: "Tumblr", category: "65+", value: "2"},
+            { platform: "Tumblr", category: "High School", value: "10"},
+            { platform: "Tumblr", category: "Some College", value: "13"},
+            { platform: "Tumblr", category: "College", value: "9"},
+            { platform: "Tumblr", category: "Less than 30000", value: "16"},
+            { platform: "Tumblr", category: "30000-49999", value: "8"},
+            { platform: "Tumblr", category: "50000-74999", value: "4"},
+            { platform: "Tumblr", category: "More than 75000", value: "11"},
+            { platform: "Tumblr", category: "Urban", value: "16"},
+            { platform: "Tumblr", category: "Suburban", value: "8"},
+            { platform: "Tumblr", category: "Rural", value: "3"},
+
+            { platform: "Facebook", category: "Total", value: "72"},
+            { platform: "Facebook", category: "Men", value: "66"},
+            { platform: "Facebook", category: "Women", value: "77"},
+            { platform: "Facebook", category: "White, Non-Hispanic", value: "70"},
+            { platform: "Facebook", category: "Black, Non-Hispanic", value: "67"},
+            { platform: "Facebook", category: "Hispanic", value: "75"},
+            { platform: "Facebook", category: "18-29", value: "82"},
+            { platform: "Facebook", category: "30-49", value: "79"},
+            { platform: "Facebook", category: "50-64", value: "64"},
+            { platform: "Facebook", category: "65+", value: "48"},
+            { platform: "Facebook", category: "High School", value: "71"},
+            { platform: "Facebook", category: "Some College", value: "72"},
+            { platform: "Facebook", category: "College", value: "72"},
+            { platform: "Facebook", category: "Less than 30000", value: "73"},
+            { platform: "Facebook", category: "30000-49999", value: "72"},
+            { platform: "Facebook", category: "50000-74999", value: "66"},
+            { platform: "Facebook", category: "More than 75000", value: "78"},
+            { platform: "Facebook", category: "Urban", value: "74"},
+            { platform: "Facebook", category: "Suburban", value: "72"},
+            { platform: "Facebook", category: "Rural", value: "67"},
+
+            { platform: "Pinterest", category: "Total", value: "31"},
+            { platform: "Pinterest", category: "Men", value: "16"},
+            { platform: "Pinterest", category: "Women", value: "44"},
+            { platform: "Pinterest", category: "White, Non-Hispanic", value: "32"},
+            { platform: "Pinterest", category: "Black, Non-Hispanic", value: "23"},
+            { platform: "Pinterest", category: "Hispanic", value: "32"},
+            { platform: "Pinterest", category: "18-29", value: "37"},
+            { platform: "Pinterest", category: "30-49", value: "36"},
+            { platform: "Pinterest", category: "50-64", value: "24"},
+            { platform: "Pinterest", category: "65+", value: "16"},
+            { platform: "Pinterest", category: "High School", value: "25"},
+            { platform: "Pinterest", category: "Some College", value: "37"},
+            { platform: "Pinterest", category: "College", value: "31"},
+            { platform: "Pinterest", category: "Less than 30000", value: "24"},
+            { platform: "Pinterest", category: "30000-49999", value: "37"},
+            { platform: "Pinterest", category: "50000-74999", value: "41"},
+            { platform: "Pinterest", category: "More than 75000", value: "30"},
+            { platform: "Pinterest", category: "Urban", value: "26"},
+            { platform: "Pinterest", category: "Suburban", value: "34"},
+            { platform: "Pinterest", category: "Rural", value: "31"},
+
+            { platform: "Instagram", category: "Total", value: "28"},
+            { platform: "Instagram", category: "Men", value: "24"},
+            { platform: "Instagram", category: "Women", value: "31"},
+            { platform: "Instagram", category: "White, Non-Hispanic", value: "21"},
+            { platform: "Instagram", category: "Black, Non-Hispanic", value: "47"},
+            { platform: "Instagram", category: "Hispanic", value: "38"},
+            { platform: "Instagram", category: "18-29", value: "55"},
+            { platform: "Instagram", category: "30-49", value: "28"},
+            { platform: "Instagram", category: "50-64", value: "11"},
+            { platform: "Instagram", category: "65+", value: "4"},
+            { platform: "Instagram", category: "High School", value: "25"},
+            { platform: "Instagram", category: "Some College", value: "32"},
+            { platform: "Instagram", category: "College", value: "26"},
+            { platform: "Instagram", category: "Less than 30000", value: "26"},
+            { platform: "Instagram", category: "30000-49999", value: "27"},
+            { platform: "Instagram", category: "50000-74999", value: "30"},
+            { platform: "Instagram", category: "More than 75000", value: "26"},
+            { platform: "Instagram", category: "Urban", value: "32"},
+            { platform: "Instagram", category: "Suburban", value: "28"},
+            { platform: "Instagram", category: "Rural", value: "18"},
+
+            { platform: "LinkedIn", category: "Total", value: "25"},
+            { platform: "LinkedIn", category: "Men", value: "26"},
+            { platform: "LinkedIn", category: "Women", value: "25"},
+            { platform: "LinkedIn", category: "White, Non-Hispanic", value: "26"},
+            { platform: "LinkedIn", category: "Black, Non-Hispanic", value: "22"},
+            { platform: "LinkedIn", category: "Hispanic", value: "22"},
+            { platform: "LinkedIn", category: "18-29", value: "22"},
+            { platform: "LinkedIn", category: "30-49", value: "32"},
+            { platform: "LinkedIn", category: "50-64", value: "26"},
+            { platform: "LinkedIn", category: "65+", value: "12"},
+            { platform: "LinkedIn", category: "High School", value: "9"},
+            { platform: "LinkedIn", category: "Some College", value: "25"},
+            { platform: "LinkedIn", category: "College", value: "46"},
+            { platform: "LinkedIn", category: "Less than 30000", value: "17"},
+            { platform: "LinkedIn", category: "30000-49999", value: "21"},
+            { platform: "LinkedIn", category: "50000-74999", value: "32"},
+            { platform: "LinkedIn", category: "More than 75000", value: "41"},
+            { platform: "LinkedIn", category: "Employed", value: "32"},
+            { platform: "LinkedIn", category: "Not Employed", value: "14"},
+            { platform: "LinkedIn", category: "Urban", value: "30"},
+            { platform: "LinkedIn", category: "Suburban", value: "26"},
+            { platform: "LinkedIn", category: "Rural", value: "12"},
+
+            { platform: "Twitter", category: "Total", value: "23"},
+            { platform: "Twitter", category: "Men", value: "25"},
+            { platform: "Twitter", category: "Women", value: "21"},
+            { platform: "Twitter", category: "White, Non-Hispanic", value: "20"},
+            { platform: "Twitter", category: "Black, Non-Hispanic", value: "28"},
+            { platform: "Twitter", category: "Hispanic", value: "28"},
+            { platform: "Twitter", category: "18-29", value: "32"},
+            { platform: "Twitter", category: "30-49", value: "29"},
+            { platform: "Twitter", category: "50-64", value: "13"},
+            { platform: "Twitter", category: "65+", value: "6"},
+            { platform: "Twitter", category: "High School", value: "19"},
+            { platform: "Twitter", category: "Some College", value: "23"},
+            { platform: "Twitter", category: "College", value: "27"},
+            { platform: "Twitter", category: "Less than 30000", value: "21"},
+            { platform: "Twitter", category: "30000-49999", value: "19"},
+            { platform: "Twitter", category: "50000-74999", value: "25"},
+            { platform: "Twitter", category: "More than 75000", value: "26"},
+            { platform: "Twitter", category: "Urban", value: "30"},
+            { platform: "Twitter", category: "Suburban", value: "21"},
+            { platform: "Twitter", category: "Rural", value: "15"}]
+
+        //Twitter
+        drawSocialMedia("#twitterCharts", "Twitter");
+        drawSocialMedia("#tumblrCharts", "Tumblr");
+        drawSocialMedia("#facebookCharts", "Facebook");
+        drawSocialMedia("#instagramCharts", "Instagram");
+        drawSocialMedia("#linkedInCharts", "LinkedIn");
+        drawSocialMedia("#pinterestCharts", "Pinterest");
+
+        drawDemographics("#genderChart", ["Men", "Women"])
+        drawDemographics("#raceChart", ["White, Non-Hispanic", "Black, Non-Hispanic", "Hispanic"])
+        drawDemographics("#ageChart", ["18-29", "30-49", "50-64", "65+"])
+        drawDemographics("#educationChart", ["High School", "Some College", "College"])
+        drawDemographics("#incomeChart", ["Less than 30000", "30000-49999", "50000-74999", "More than 75000"])
+        drawDemographics("#locationChart", ["Urban", "Suburban", "Rural"])
+
+    }
+
+    function drawDemographics(divSelector, demogrpahic){
+        var relevantData = data.filter(function(val){
+            for (var i = 0; i < demogrpahic.length; i++) {
+                if(val.category == demogrpahic[i]) return true;
+            };
+            return false;
+        });
+        var totalSum = 0;
+        for (var i = 0; i < relevantData.length; i++) {
+            totalSum += parseInt(relevantData[i].value);
+        };
+        var totalWidth = 1100
+
+        for (var i = 0; i < demogrpahic.length; i++) {
+            console.log(i);
+            var dataset = data.filter(function(val){return val.category == demogrpahic[i]})
+            
+            var subSum = 0;
+            for (var j = 0; j < dataset.length; j++) {
+                subSum += parseInt(dataset[j].value);
+            };
+
+            var width = totalWidth * (subSum / totalSum);
+            var height = totalWidth * (subSum / totalSum);
+            var radius = Math.min(width, height) / 2;
+            var donutWidth = 75;
+            var legendRectSize = 18;
+            var legendSpacing = 4;
+            var color = d3.scale.category20b();
+            var svg = d3.select(divSelector)
+              .append('svg')
+              .attr('width', width)
+              .attr('height', height + 40)
+              .append('g')
+              .attr('transform', 'translate(' + (width / 2) + 
+                ',' + (height / 2) + ')');
+
+            var title = svg.append("text")
+              .text(demogrpahic[i])
+              .attr("y", (height / 2) + 25)
+              .attr("x", (width / 2) * -1)
+              .attr("font-size", "25px")
+              .style("font-weight", "bold");
+
+            var arc = d3.svg.arc()
+              .innerRadius(radius - donutWidth)
+              .outerRadius(radius);
+            
+            var pie = d3.layout.pie()
+              .value(function(d) { return d.value; })
+              .sort(null);
+            var tooltip = d3.select(divSelector)                            // NEW
+              .append('div')                                                // NEW
+              .attr('class', 'tooltip');                                    // NEW
+                          
+            tooltip.append('div')                                           // NEW
+              .attr('class', 'platform');                                   // NEW
+                 
+            tooltip.append('div')                                           // NEW
+              .attr('class', 'value');                                      // NEW
+            tooltip.append('div')                                           // NEW
+              .attr('class', 'percent');                                    // NEW
+            
+              dataset.forEach(function(d) {
+                d.value = +d.value;
+              });
+              var path = svg.selectAll('path')
+                .data(pie(dataset))
+                .enter()
+                .append('path')
+                .attr('d', arc)
+                .attr('fill', function(d, i) { 
+                  return color(d.data.platform); 
+                });
+              path.on('mouseover', function(d) {                            // NEW
+                var total = d3.sum(dataset.map(function(d) {                // NEW
+                  return d.value;                                           // NEW
+                }));                                                        // NEW
+                var percent = Math.round(1000 * d.data.value / total) / 10; // NEW
+                tooltip.select('.platform').html(d.data.platform);          // NEW
+                tooltip.select('.value').html(d.data.value);                // NEW
+                tooltip.select('.percent').html(percent + '%');             // NEW
+                tooltip.style('display', 'block');                          // NEW
+              });                                                           // NEW
+              
+              path.on('mouseout', function() {                              // NEW
+                tooltip.style('display', 'none');                           // NEW
+              });                                                           // NEW
+                
+              var legend = svg.selectAll('.legend')
+                .data(color.domain())
+                .enter()
+                .append('g')
+                .attr('class', 'legend')
+                .attr('transform', function(d, i) {
+                  var height = legendRectSize + legendSpacing;
+                  var offset =  height * color.domain().length / 2;
+                  var horz = -2 * legendRectSize;
+                  var vert = i * height - offset;
+                  return 'translate(' + horz + ',' + vert + ')';
+                });
+              legend.append('rect')
+                .attr('width', legendRectSize)
+                .attr('height', legendRectSize)                                   
+                .style('fill', color)
+                .style('stroke', color);
+                
+              legend.append('text')
+                .attr('x', legendRectSize + legendSpacing)
+                .attr('y', legendRectSize - legendSpacing)
+                .text(function(d) { return d; });
+              console.log('end');
+        }
+    }
+
+    function drawSocialMedia(divSelector, socialMedia){
+        var w = 650;
+        var h = 300;
+        
+        var chart = d3.select(divSelector)
+        var relevantData = data.filter(function(val){return (val.platform == socialMedia)})
+
+        drawBarChart(relevantData.filter(function(val){return (val.category == "Men" || 
+                                                          val.category == "Women")}), 
+                    chart, w, h, 20, "Gender");
+
+        drawBarChart(relevantData.filter(function(val){return (val.category == "White, Non-Hispanic" || 
+                                                          val.category == "Black, Non-Hispanic" || 
+                                                          val.category == "Hispanic")}), 
+                    chart, w, h, 20, "Race");
+
+        drawBarChart(relevantData.filter(function(val){return (val.category == "18-29" || 
+                                                          val.category == "30-49" || 
+                                                          val.category == "50-64" ||
+                                                          val.category == "65+")}), 
+                    chart, w, h, 20, "Age");
+
+        drawBarChart(relevantData.filter(function(val){return (val.category == "High School" || 
+                                                          val.category == "Some College" || 
+                                                          val.category == "College")}), 
+                    chart, w, h, 20, "Education");
+
+        drawBarChart(relevantData.filter(function(val){return (val.category == "Less than 30000" || 
+                                                  val.category == "30000-49999" || 
+                                                  val.category == "50000-74999" ||
+                                                  val.category == "More than 75000")}), 
+            chart, w, h, 20, "Income");
+
+        drawBarChart(relevantData.filter(function(val){return (val.category == "Urban" || 
+                                                  val.category == "Suburban" || 
+                                                  val.category == "Rural")}), 
+            chart, w, h, 20, "Living Situation");
+    }
+
+    function drawBarChart(data, holder, width, height, margin, title){
+        titleHeight = 30;                                      
+        var svg = holder.append("svg").attr("width", width + (data.length * margin) + margin)
+                                      .attr("height", height + titleHeight)
+                                      .style("margin-top", "20px")
+
+        var max_val = 0;
+        for (var d in data) {
+            max_val = Math.max(data[d].value, max_val);
+        }
+        var dx = (width / data.length) + margin;
+        var dy = height / max_val;
+
+        // bars
+        var bars = svg.selectAll(".bar")
+            .data(data)
+            .enter()
+            .append("rect")
+            .style("fill", getRandomColor)
+            .attr("x", function(d, i) {return margin + (dx*i);})
+            .attr("y", function(d, i) {return titleHeight + height - (dy*d.value);})
+            .attr("width", function(d, i) {return (dx - margin)})
+            .attr("height", function(d, i) {return dy*d.value});
+
+        // labels
+        var text = svg.selectAll("text")
+            .data(data)
+            .enter()
+            .append("text")
+            .attr("x", function(d, i) {return dx*i + margin + 10;})
+            .attr("y", function(d, i) {return height;})
+            .text( function(d) {return d.category + ": " + d.value;})
+            .attr("font-size", "15px")
+            .style("font-weight", "bold")
+
+        var title = svg.append("text")
+                      .text(title)
+                      .attr("y", 22)
+                      .attr("x", 20)
+                      .attr("font-size", "25px")
+                      .style("font-weight", "bold");
+
+    }
+    
+    function getRandomColor() {
+        var letters = '456789ABCDEF'.split('');
+        var color = '#';
+        for (var i = 0; i < 6; i++ ) {
+            color += letters[Math.floor(Math.random() * 12)];
+        }
+        return color;
+    }
+    </script
+
+    <script src="scripts/main.js"></script>
+    <!-- endbuild -->
+
+    <!-- build:js scripts/vendor/bootstrap.js -->
+    <script src="bower_components/bootstrap/js/affix.js"></script>
+    <script src="bower_components/bootstrap/js/alert.js"></script>
+    <script src="bower_components/bootstrap/js/dropdown.js"></script>
+    <script src="bower_components/bootstrap/js/tooltip.js"></script>
+    <script src="bower_components/bootstrap/js/modal.js"></script>
+    <script src="bower_components/bootstrap/js/transition.js"></script>
+    <script src="bower_components/bootstrap/js/button.js"></script>
+    <script src="bower_components/bootstrap/js/popover.js"></script>
+    <script src="bower_components/bootstrap/js/carousel.js"></script>
+    <script src="bower_components/bootstrap/js/scrollspy.js"></script>
+    <script src="bower_components/bootstrap/js/collapse.js"></script>
+    <script src="bower_components/bootstrap/js/tab.js"></script>
+    <!-- endbuild -->
+</body>
+</html>
