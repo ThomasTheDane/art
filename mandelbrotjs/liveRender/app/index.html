@@ -1,0 +1,421 @@
+<!doctype html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+    <link rel="stylesheet" href="styles/main.css">
+    <!-- build:js scripts/vendor/modernizr.js -->
+    <script src="bower_components/modernizr/modernizr.js"></script>
+    <!-- endbuild -->
+
+    <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
+    
+    <link rel="stylesheet" href="styles/farbtastic.css" type="text/css">
+
+    <script src="bower_components/jquery/jquery.js"></script>
+    <script src="scripts/main.js"></script>
+
+    <!-- gradient stuff -->
+/>
+    <script src="gradientPicker/jquery-ui-1.8.2.custom/js/jquery-1.4.2.min.js"></script>
+    <script src="gradientPicker/jquery-ui-1.8.2.custom/js/jquery-ui-1.8.2.custom.min.js"></script>
+
+    <script type="text/javascript" src="scripts/farbtastic.js"></script>
+
+    <style>
+        body {
+          font-family: sans-serif;
+        }
+
+        div.instructions,
+        div#text {
+          font-size: smaller;
+          font-style: italic;
+          color: #999;
+          margin-bottom: 5px;
+          width: 325px;
+        }
+
+        div.instructions {
+          cursor:default;
+        }
+
+        div#gradient-container {
+          background: -moz-linear-gradient(top, #e0e0e0, #c0c0c0);
+          background: -webkit-gradient(linear, left top, left bottom, from(#e0e0e0), to(#c0c0c0));
+          -moz-border-radius: 8px;
+          -webkit-border-radius: 8px;
+          -moz-box-shadow: 1px 1px 5px 0 rgba(0, 0, 0, .4);
+          -webkit-box-shadow: 1px 1px 5px 0 rgba(0, 0, 0, .4);
+          margin: 8px;
+          padding: 8px;
+          display: inline-block;
+        }
+
+        div#credits {
+          background: -moz-linear-gradient(top, #e0e0e0, #c0c0c0);
+          background: -webkit-gradient(linear, left top, left bottom, from(#e0e0e0), to(#c0c0c0));
+          -moz-border-radius: 8px;
+          -webkit-border-radius: 8px;
+          -moz-box-shadow: 1px 1px 5px 0 rgba(0, 0, 0, .4);
+          -webkit-box-shadow: 1px 1px 5px 0 rgba(0, 0, 0, .4);
+          margin: 8px;
+          padding: 8px;
+          width: 350px;
+          font-size: smaller;
+          color: #444;
+        }
+
+        div#credits a {
+          color: #227;
+        }
+
+        div#gradient-widget {
+          display: inline-block;
+          position: relative;
+          width: 134px;
+          height: 220px;
+        }
+          
+        div#gradient {
+          height: 200px;
+          -moz-box-shadow: 1px 1px 5px 0px rgba(0, 0, 0, .5);
+          -webkit-box-shadow: 1px 1px 5px 0px rgba(0, 0, 0, .5);
+          width: 30px;
+          position: absolute;
+          top: 0;
+          left: 0;
+        }
+
+        div#gradient-items {
+          height: 220px;
+          width: 100px;
+          position: absolute;
+          left: 37px;
+        }
+
+        div.gradient-item {
+          width: 100px;
+          height: 20px;
+          -moz-box-shadow: 1px 1px 3px 0 rgba(0, 0, 0, .4);
+          -webkit-box-shadow: 1px 1px 3px 0 rgba(0, 0, 0, .4);
+          position: absolute;
+          cursor: row-resize;
+        }
+
+        div.red {
+          top: 120px;
+          background-color: #e24;
+        }
+
+        div.gradient-item.selected {
+          -moz-box-shadow: 0 0 3px 2px rgba(0, 255, 255, .9);
+          -webkit-box-shadow: 0 0 3px 2px rgba(0, 255, 255, .9);
+        }
+
+        div.gradient-item img.pointer {
+          position: absolute;
+          top: 0;
+          left: -9px;
+        }
+
+        div#gradient-tools {
+          display: inline-block;
+          padding-left: 12px;
+        }
+
+        div#colorpicker, div#text {
+          -moz-box-shadow: 1px 1px 3px 0 rgba(0, 0, 0, .4);
+          -webkit-box-shadow: 1px 1px 3px 0 rgba(0, 0, 0, .4);
+          background: -moz-linear-gradient(top, #f0f0f0, #e0e0e0);
+          background: -webkit-gradient(linear, left top, left bottom, from(#f0f0f0), to(#e0e0e0));
+          -moz-border-radius: 8px;
+          -webkit-border-radius: 8px;
+          margin-bottom: 8px;
+        } 
+
+        div#text {
+          display: none;
+          font-style: normal;
+          padding: 8px;
+          color: #555;
+          margin-top: 8px;
+        }
+
+        div.delete {
+          background-color: #c13;
+          height: 16px;
+          width: 16px;
+          -moz-border-radius: 8px;
+          -webkit-border-radius: 8px;
+          -moz-box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, .4);
+          -webkit-box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, .4);
+          position: absolute;
+          right: 2px;
+          top: 2px;
+        }
+
+        div.delete:hover {
+          background-color: #f13;
+        }
+
+        div.delete:active {
+          -moz-box-shadow: none;
+          -webkit-box-shadow: none;
+        }
+
+
+    </style>
+
+    <script>
+        var picker_target;
+
+        $(function() {
+          $(document).ready(function() {
+            $('#colorpicker').farbtastic(setColor);
+          });
+          
+          $('#gradient-items').append(gradientDiv());
+          $('#gradient-items').children('.gradient-item').last().css('top', 0);
+          $('#gradient-items').children('.gradient-item').last().css('background-color', '#000000');
+
+          $('#gradient-items').append(gradientDiv());
+          $('#gradient-items').children('.gradient-item').last().css('top', $('#gradient').height() + 1 + "px");
+          $('#gradient-items').children('.gradient-item').last().css('background-color', '#ffffff');
+           
+          $('#gradient').click(function(e) {
+            var y = e.pageY - $(this).offset().top;
+            
+            // If we try to grab the color after we add the item, we'll get a transparent color.
+            var color = getColor(y / $('#gradient').height() * 100);
+            
+            $('#gradient-items').append(gradientDiv());
+            var item = $('#gradient-items').children('.gradient-item').last().get();
+            $(item).css('top', y);
+            $(item).css('background-color', color);
+
+            picker_target = item;
+            updateItems();
+            $(item).trigger('click');
+          });
+          
+          $('#showgradient').click(function() {
+            $('#text').slideToggle();
+            if($(this).html() == "Show CSS") {
+              $(this).html("Hide CSS");
+            } else {
+              $(this).html("Show CSS");
+            }
+          });
+          
+          //$('#gradient-container').draggable();
+          
+          updateItems();
+          $('.gradient-item').first().trigger('click');
+        });
+
+        function updateItems() {
+          $('.gradient-item').draggable({
+            containment: 'parent',
+            axis: 'y',
+            drag: function(event, ui) {
+              dragItem();
+            },
+            start:function(event, ui) {
+              $(this).trigger('click');
+            }
+          });
+
+          $('.gradient-item').click(function() {
+            picker_target = this;
+            $('.gradient-item').removeClass('selected');
+            $(this).addClass('selected');
+            var color = rgb2hex($(this).css('background-color'));
+            $.farbtastic($('#colorpicker')).setColor(color);
+          });
+          
+          $('div.delete').click(function() {
+            if($('#gradient-items').children('.gradient-item').length > 2) {
+              $(this).parent().remove();
+              dragItem();
+            }
+          });
+          
+          dragItem();
+        }
+
+        function setColor(color) {
+          $(picker_target).css('background-color', color);
+          dragItem();
+        }
+
+        function getColorList() {
+          var colors = new Array();
+          $('#gradient-items').children('.gradient-item').each(function() {
+            var color = new Array();
+            pos = $(this).position();
+            color.col = $(this).css('background-color');
+            color.pct = Math.round(pos.top / $('#gradient').height() * 100);
+            colors.push(color);
+          });
+          
+          colors.sort(sortColors);
+          return colors;
+        }
+
+        function getColor(percent) {
+          percent = Math.round(percent);
+          var colors = getColorList();
+          
+          for(var i = 0; i < colors.length; i++) {
+            var c = colors[i];
+            if(c.pct > percent) {
+              if(i == 0) {
+                //alert("before: " + i + " " + c.col);
+                return rgb2hex(c.col);
+              } else {
+                var prev = colors[i-1];
+                //alert(percent + "% between " + (i - 1) + " (" + prev.col + ") and " + i + " (" + c.col + ")");
+                return interpolateColors(prev.col, c.col, prev.pct, c.pct, percent);
+              }
+            }
+          }
+          //alert("after: " + colors[colors.length - 1].col);
+          return rgb2hex(colors[colors.length - 1].col);
+        }
+
+        function getGradientColors(){
+          var colors = new Array();
+          $('#gradient-items').children('.gradient-item').each(function() {
+            var color = new Array();
+
+            pos = $(this).position();
+            color.col = $(this).css('background-color');
+            color.pct = Math.round(pos.top / $('#gradient').height() * 100);
+            colors.push(color);
+          });
+          
+          colors.sort(sortColors);
+          return colors;
+        }
+
+        function dragItem() {
+          var colors = getColorList();
+          
+          var gradient = "-moz-linear-gradient(";
+          var webkit_gradient = "-webkit-gradient(linear, left top, left bottom, ";
+          var items = new Array();
+          var webkit_items = new Array();
+          for(var i = 0; i < colors.length; i++) {
+            webkit_items.push("color-stop(" + colors[i].pct + "%" + ", " + colors[i].col + ")");
+            items.push(colors[i].col + " " + colors[i].pct + "%");
+          }
+          
+          gradient += items.join(", ");
+          gradient += ")";
+          
+          webkit_gradient += webkit_items.join(", ");
+          webkit_gradient += ")";
+          $('#text').html("background: " + gradient + "; <br/><br/>background: " + webkit_gradient + ";");
+          $('#gradient').css('background', gradient);
+          $('#gradient').css('background', webkit_gradient);
+        }
+
+        function sortColors(c1, c2) {
+          return c1.pct - c2.pct;
+        }
+
+        function rgb2hex(rgb) {
+          rgb = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+          return "#" + hex(rgb[1]) + hex(rgb[2]) + hex(rgb[3]);
+        }
+
+        function getRgbObject(color) {
+          return color.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+        }
+
+        function rgbObject2hex(rgb) {
+          return "#" + hex(rgb[1]) + hex(rgb[2]) + hex(rgb[3]);
+        }
+
+        function hex(x) {
+          return ("0" + parseInt(x).toString(16)).slice(-2);
+        }
+
+        function interpolateColors(col1, col2, lower, upper, pos) {
+          var x = (pos - lower) / (upper - lower);
+          //alert(x + ": " + lower + " (" + col1 + ") /" + upper + " (" + col2 + ") /" + pos);
+          return rgbObject2hex(rgbObjectInterp(getRgbObject(col1), getRgbObject(col2), x));
+        }
+
+        function rgbObjectInterp(rgb1, rgb2, x) {
+          rgb = new Array();
+          rgb[1] = Math.round(interp(rgb1[1], rgb2[1], x));
+          rgb[2] = Math.round(interp(rgb1[2], rgb2[2], x));
+          rgb[3] = Math.round(interp(rgb1[3], rgb2[3], x));
+          return rgb;
+        }
+
+        function interp(a, b, x) {
+          var r = (parseFloat(b) - parseFloat(a)) * parseFloat(x) + parseFloat(a);
+          //r += a;
+          //alert(a + ", " + b + ", " + x + ": " + r + "\n" + "b-a: " + (b-a) + " *x:" + ((b-a)*x));
+          return r
+        }
+
+        function gradientDiv() {
+          return "<div class='gradient-item'><img class='pointer' src='pointer.png'><div class='delete'></div></div>";
+        }
+        </script>
+
+  </head>
+
+  <body>
+    <div class="container">
+        <h1>Mandelbrot</h1>
+        <div class="col-md-6">
+            <canvas id="myCanvas" width="500" height="500"></canvas>
+        </div>
+        <div class="col-md-6">
+            <div id="gradient-container">
+                  <div id="gradient-container">
+                      <div class="instructions">Click the gradient to add new sliders.</div>
+                      <div id="gradient-widget">
+                        <div id="gradient" style="background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgb(0, 0, 0)), to(rgb(255, 255, 255)));"></div>
+                        <div id="gradient-items"><div class="gradient-item ui-draggable selected" style="top: 0px; background-color: rgb(0, 0, 0);"><img class="pointer" src="pointer.png"><div class="delete"></div></div><div class="gradient-item ui-draggable" style="top: 201px; background-color: rgb(255, 255, 255);"><img class="pointer" src="pointer.png"><div class="delete"></div></div></div>
+                      </div>
+                      <div id="gradient-tools">
+                        <div id="colorpicker"><div class="farbtastic"><div class="color" style="background-color: rgb(255, 0, 0);"></div><div class="wheel"></div><div class="overlay"></div><div class="h-marker marker" style="left: 97px; top: 13px;"></div><div class="sl-marker marker" style="left: 147px; top: 147px;"></div></div></div>
+                        <button id="showgradient">Show CSS</button>
+                      </div>
+                      <div id="text">background: -moz-linear-gradient(rgb(0, 0, 0) 0%, rgb(255, 255, 255) 100%); <br><br>background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgb(0, 0, 0)), color-stop(100%, rgb(255, 255, 255)));</div>
+                    </div>
+            </div>
+            
+            <div id=sliderHolders>
+                <h4>Max iterations</h4>
+                <div class="slider" id="maxIterations"></div>
+                <div class="sliderLabel" id="maxIterationsLabel">pie</div>
+            </div>
+
+            <div id="renderButton" class="btn btn-success">Render!</div>
+        </div>
+
+        <!-- <div id="gradient"></div> -->
+        <!-- <div><canvas id="gradientCanvas" width="512" height="40"></canvas></div> -->
+
+        <!-- <div class="container"> -->
+            
+        <!-- </div> -->
+        
+    </div>
+
+  </body>
+</html>

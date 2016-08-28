@@ -17,10 +17,20 @@ class Gradient {
       addColor(color(252,0,255), 200);
     }
     if(selector == "floyd"){
+//      addColor(color(0,0,0), 0);
       addColor(color(194,21,0), 0);
-      addColor(color(255,197,0), 100);
-      addColor(color(252,0,255), 200);
-      addColor(color(194,21,0), 300);      
+      addColor(color(255,197,0), 10);
+      addColor(color(252,0,255), 20);
+      addColor(color(194,21,0), 25);
+    }
+    
+    if(selector == "blueYellow"){
+      addColor(color(1, 0, 100), 0);
+      addColor(color(255,255,255), 100);
+      addColor(color(250, 200, 40), 200);
+      
+      addColor(color(1, 0, 100), 300);
+
     }
   }
   
@@ -41,7 +51,7 @@ class Gradient {
     int location = int(position*maxPosition);
     location = location + rotation;
     if(location > maxPosition){
-      location = location - maxPosition;
+      //location = location - maxPosition;
     }
     for(int i = 0; i < colorCount; i++){
       if(location >= positions[i] && location <= positions[i+1]){

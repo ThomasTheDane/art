@@ -18,17 +18,6 @@ void draw(){
 //  setGradient();
 }
 
-void setGradient() {
-
-  noFill();
-  for (int i = 0; i <= width; i++) {
-    float inter = map(i, 0, height, 0, 1);
-    color c = lerpColor(c1, c2, (float)i / width);
-    stroke(c);
-    line(i, 0, i, height);
-  }
-}
-
 color gradient1(int location){
   color[] gradientColors = new color[7];
 

@@ -11,6 +11,8 @@ class MandelbrotGenerator{
   // draws using a basic counter but  with a -ln(n) modification. This gives good distribution but is highly dependent on maxiterations  
   void drawBasic(){
     // Start y
+    double maxHue = 0;
+    double minHue = 10000000;
     double y = ymin;
     for (int j = 0; j < height; j++) {
       // Start x
@@ -32,20 +34,35 @@ class MandelbrotGenerator{
           }
           n++;
         }
-        float hue = -1*log(float(n)/maxiterations);
+        float hue = (float(n)/maxiterations);
+        
+        //printSample(hue, 10000);
+        if(hue > maxHue){
+          maxHue = hue;
+        }
+        if(hue < minHue){
+          minHue = hue;
+        }
         //printSample(hue, 10000);
         if (n == maxiterations) {
           pixels[i+j*width] = color(0, 0, 0);
         } else {
-          pixels[i+j*width] = myGradient.getColor(hue/6.214);
+          //pixels[i+j*width] = myGradient.getColor(hue % 1.02);
+          //if (myGradient.getColor(hue % 1.02) < 2) {
+          //  float g = myGradient.getColor(hue % 1.02);
+          //}
+          //if (myGradient.getColor(hue % 1.02) < 2) {
+          //  float h = myGradient.getColor(hue);
+          //}
+          pixels[i+j*width] = myGradient.getColor(hue);
         }
-        
         
         x += dx;
       }
       y += dy;
     }
-  
+    println("max hue: ", maxHue);
+    println("min hue: ", minHue);
   }
   
   // histogramic coloring keeps the same amount of each color in the picture at all times 
@@ -101,7 +118,7 @@ class MandelbrotGenerator{
           for(int k = 0; k < iterationsNeeded[i][j]; k++){
             hue += histogram[k] / total;
           }
-  
+           
           pixels[i+j*width] = myGradient.getColor(hue);
         }
       }
@@ -109,6 +126,8 @@ class MandelbrotGenerator{
   }
   
   void drawPotential(){
+    float[][] nus;
+    
     // Start y
     double y = ymin;
     for (int j = 0; j < height; j++) {
@@ -137,12 +156,13 @@ class MandelbrotGenerator{
           float nu = log( (float)(log_zn / log(2)) ) / log(2);
           
           float nuIterations = (float)(n + 1) - nu;
-          
-          float hue = ((nuIterations/100) % 1.0);
-          printSample(hue, 1000);
+          nuIterations = log((nuIterations + 1))/2;
+
+          float hue = (nuIterations % 1);
+          //printSample(hue, 1000);
           color color1 = myGradient.getColor(hue); 
           color color2 = myGradient.getColor(hue);
-          color actualColor = lerpColor(color1, color2, hue % 1);
+          color actualColor = lerpColor(color1, color2, hue);
           pixels[i+j*width] = actualColor;
         }else{
           pixels[i+j*width] = color(0, 0, 0);
