@@ -15,18 +15,21 @@ var maxIterations = 500;
 
 var zoomAmount = 1.5;
 
+var gradient;
+
 $(function() {
 	Slider("#maxIterations", 1000);
+	// console.log(getGradientColorsFromPicker())
 
-
-	drawMandel();
+	// drawMandel();
 	$('#myCanvas').click(function q(event) {
 	    event = event || window.event;
 
 	    var canvas = document.getElementById('myCanvas'),
-	        x = event.pageX - canvas.offsetLeft,
-	        y = event.pageY - canvas.offsetTop;
+	        x = event.pageX - canvas.getBoundingClientRect().left;// - canvas.offsetLeft,
+	        y = event.pageY - canvas.getBoundingClientRect().top;// - canvas.offsetTop;
 
+	    console.log(x, y);
 	    var clickedX = map(x, 0, width, xmin, xmax);
 	    var clickedY = map(y, 0, height, ymin, ymax);
 
@@ -35,6 +38,12 @@ $(function() {
 
 	$("#renderButton").click(function(){
 		maxIterations = $("#maxIterations").slider("value");
+		gradient = getGradientColorsFromPicker();
+		console.log(gradient)
+		var c = document.getElementById("myCanvas");
+		var ctx = c.getContext("2d");
+		ctx.clearRect(0,0,width, height);
+
 		console.log(maxIterations);
 		drawMandel();
 	});
@@ -84,31 +93,32 @@ function setMandelColor(x, y, color){
 }
 
 function getGradientColor(location){
-	var gradient = [
-	    [
-	        0,
-	        [252,0,255]
-	    ],
-	    [
-	        100,
-	        [0,219,222]
-	    ]
-	];
+	// console.log(gradient)
+	// var gradient = [
+	//     {
+	//         location:0,
+	//         color:[252,0,255]
+	//     },
+	//     {
+	//         location:100,
+	//         color:[0,219,222]
+	//     }
+	// ];
 	var colorRange = []
     $.each(gradient, function( index, value ) {
-        if(location<=value[0]) {
+        if(location<=value.location) {
             colorRange = [index-1,index]
             return false;
         }
     });
     //Get the two closest colors
-    var firstcolor = gradient[colorRange[0]][1];
+    var firstcolor = gradient[colorRange[0]].color;
 
-    var secondcolor = gradient[colorRange[1]][1];
+    var secondcolor = gradient[colorRange[1]].color;
     
     //Calculate ratio between the two closest colors
-    var firstcolor_x = (gradient[colorRange[0]][0]/100);
-    var secondcolor_x = (gradient[colorRange[1]][0]/100)-firstcolor_x;
+    var firstcolor_x = (gradient[colorRange[0]].location/100);
+    var secondcolor_x = (gradient[colorRange[1]].location/100)-firstcolor_x;
     var slider_x = (location/100)-firstcolor_x;
     var ratio = slider_x/secondcolor_x
     

@@ -291,18 +291,25 @@
           return rgb2hex(colors[colors.length - 1].col);
         }
 
-        function getGradientColors(){
+        function getGradientColorsFromPicker(){
           var colors = new Array();
           $('#gradient-items').children('.gradient-item').each(function() {
-            var color = new Array();
+            var aColor = {}
 
+            aColor.color = $(this).css('background-color').substring(4).split(",");
+            aColor.color[0] = parseInt(aColor.color[0]);
+            aColor.color[1] = parseInt(aColor.color[1]);
+            aColor.color[2] = parseInt(aColor.color[2]);
+            
             pos = $(this).position();
-            color.col = $(this).css('background-color');
-            color.pct = Math.round(pos.top / $('#gradient').height() * 100);
-            colors.push(color);
+            aColor.location = Math.round(pos.top / $('#gradient').height() * 100)
+            
+            colors.push(aColor);
           });
           
-          colors.sort(sortColors);
+          colors.sort(function(a, b) { 
+            return a.location - b.location;
+          })
           return colors;
         }
 
