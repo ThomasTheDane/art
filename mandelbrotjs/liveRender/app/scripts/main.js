@@ -19,6 +19,13 @@ var gradient;
 
 $(function() {
 	Slider("#maxIterations", 1000);
+	// $( "#maxIterations" ).slider({
+ //      orientation: "horizontal",
+ //      range: "min",
+ //      max: 1000,
+ //      value: 1000 / 2
+ //    });
+
 	// console.log(getGradientColorsFromPicker())
 
 	// drawMandel();
@@ -29,7 +36,7 @@ $(function() {
 	        x = event.pageX - canvas.getBoundingClientRect().left;// - canvas.offsetLeft,
 	        y = event.pageY - canvas.getBoundingClientRect().top;// - canvas.offsetTop;
 
-	    console.log(x, y);
+	    console.log("start location: ", x, y);
 	    var clickedX = map(x, 0, width, xmin, xmax);
 	    var clickedY = map(y, 0, height, ymin, ymax);
 
@@ -39,12 +46,12 @@ $(function() {
 	$("#renderButton").click(function(){
 		maxIterations = $("#maxIterations").slider("value");
 		gradient = getGradientColorsFromPicker();
-		console.log(gradient)
+		console.log("gradient: ", gradient)
 		var c = document.getElementById("myCanvas");
 		var ctx = c.getContext("2d");
 		ctx.clearRect(0,0,width, height);
 
-		console.log(maxIterations);
+		console.log("max iter: ", maxIterations);
 		drawMandel();
 	});
 });
@@ -55,7 +62,7 @@ function drawMandel(){
 
 	var y = ymin;
 	for (var j = 0; j < height; j++) {
-		console.log("j", j);
+		// console.log("j", j);
 		var x = xmin;
 		for (var i = 0; i < width; i++) {
 			var a = 0 + x
@@ -93,17 +100,8 @@ function setMandelColor(x, y, color){
 }
 
 function getGradientColor(location){
-	// console.log(gradient)
-	// var gradient = [
-	//     {
-	//         location:0,
-	//         color:[252,0,255]
-	//     },
-	//     {
-	//         location:100,
-	//         color:[0,219,222]
-	//     }
-	// ];
+
+	
 	var colorRange = []
     $.each(gradient, function( index, value ) {
         if(location<=value.location) {
@@ -111,7 +109,17 @@ function getGradientColor(location){
             return false;
         }
     });
+    if(colorRange[0] < 0){
+    	colorRange[0] = 0;
+    	colorRange[1] = 1;
+    }
+    if(colorRange.length == 0){
+    	colorRange[0] = 0;
+    	colorRange[1] = 1;
+    }
+
     //Get the two closest colors
+    // if(Math.random() > .999) {console.log("color range: ", colorRange)}
     var firstcolor = gradient[colorRange[0]].color;
 
     var secondcolor = gradient[colorRange[1]].color;
@@ -161,10 +169,8 @@ function map(num, originalStart, originalEnd, finalStart, finalEnd){
 	return (num-originalStart)/(originalEnd-originalStart) * (finalEnd-finalStart) + finalStart;
 }
 
-// var maxIterationsSlider = new Slider("#maxIterations");
-
-
 function Slider(id, maxVal){
+	console.log("setting up slider: ", id);
 	function changeSlider(){
 		// alert($(id).slider("value"))
 		$(id + "Label").html($(id).slider("value"))
