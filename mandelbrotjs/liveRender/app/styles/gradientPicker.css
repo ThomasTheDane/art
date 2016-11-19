@@ -1,0 +1,140 @@
+body {
+          font-family: sans-serif;
+        }
+
+        div.instructions,
+        div#text {
+          font-size: smaller;
+          font-style: italic;
+          color: #999;
+          margin-bottom: 5px;
+          width: 325px;
+        }
+
+        div.instructions {
+          cursor:default;
+        }
+
+        div#gradient-container {
+          background: -moz-linear-gradient(top, #e0e0e0, #c0c0c0);
+          background: -webkit-gradient(linear, left top, left bottom, from(#e0e0e0), to(#c0c0c0));
+          -moz-border-radius: 8px;
+          -webkit-border-radius: 8px;
+          -moz-box-shadow: 1px 1px 5px 0 rgba(0, 0, 0, .4);
+          -webkit-box-shadow: 1px 1px 5px 0 rgba(0, 0, 0, .4);
+          margin: 8px;
+          padding: 8px;
+          display: inline-block;
+        }
+
+        div#credits {
+          background: -moz-linear-gradient(top, #e0e0e0, #c0c0c0);
+          background: -webkit-gradient(linear, left top, left bottom, from(#e0e0e0), to(#c0c0c0));
+          -moz-border-radius: 8px;
+          -webkit-border-radius: 8px;
+          -moz-box-shadow: 1px 1px 5px 0 rgba(0, 0, 0, .4);
+          -webkit-box-shadow: 1px 1px 5px 0 rgba(0, 0, 0, .4);
+          margin: 8px;
+          padding: 8px;
+          width: 350px;
+          font-size: smaller;
+          color: #444;
+        }
+
+        div#credits a {
+          color: #227;
+        }
+
+        div#gradient-widget {
+          display: inline-block;
+          position: relative;
+          width: 134px;
+          height: 220px;
+        }
+          
+        div#gradient {
+          height: 200px;
+          -moz-box-shadow: 1px 1px 5px 0px rgba(0, 0, 0, .5);
+          -webkit-box-shadow: 1px 1px 5px 0px rgba(0, 0, 0, .5);
+          width: 30px;
+          position: absolute;
+          top: 0;
+          left: 0;
+        }
+
+        div#gradient-items {
+          height: 220px;
+          width: 100px;
+          position: absolute;
+          left: 37px;
+        }
+
+        div.gradient-item {
+          width: 100px;
+          height: 20px;
+          -moz-box-shadow: 1px 1px 3px 0 rgba(0, 0, 0, .4);
+          -webkit-box-shadow: 1px 1px 3px 0 rgba(0, 0, 0, .4);
+          position: absolute;
+          cursor: row-resize;
+        }
+
+        div.red {
+          top: 120px;
+          background-color: #e24;
+        }
+
+        div.gradient-item.selected {
+          -moz-box-shadow: 0 0 3px 2px rgba(0, 255, 255, .9);
+          -webkit-box-shadow: 0 0 3px 2px rgba(0, 255, 255, .9);
+        }
+
+        div.gradient-item img.pointer {
+          position: absolute;
+          top: 0;
+          left: -9px;
+        }
+
+        div#gradient-tools {
+          display: inline-block;
+          padding-left: 12px;
+        }
+
+        div#colorpicker, div#text {
+          -moz-box-shadow: 1px 1px 3px 0 rgba(0, 0, 0, .4);
+          -webkit-box-shadow: 1px 1px 3px 0 rgba(0, 0, 0, .4);
+          background: -moz-linear-gradient(top, #f0f0f0, #e0e0e0);
+          background: -webkit-gradient(linear, left top, left bottom, from(#f0f0f0), to(#e0e0e0));
+          -moz-border-radius: 8px;
+          -webkit-border-radius: 8px;
+          margin-bottom: 8px;
+        } 
+
+        div#text {
+          display: none;
+          font-style: normal;
+          padding: 8px;
+          color: #555;
+          margin-top: 8px;
+        }
+
+        div.delete {
+          background-color: #c13;
+          height: 16px;
+          width: 16px;
+          -moz-border-radius: 8px;
+          -webkit-border-radius: 8px;
+          -moz-box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, .4);
+          -webkit-box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, .4);
+          position: absolute;
+          right: 2px;
+          top: 2px;
+        }
+
+        div.delete:hover {
+          background-color: #f13;
+        }
+
+        div.delete:active {
+          -moz-box-shadow: none;
+          -webkit-box-shadow: none;
+        }

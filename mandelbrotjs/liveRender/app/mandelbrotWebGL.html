@@ -1,0 +1,104 @@
+<html>
+  <head>
+
+    <link rel="stylesheet" href="styles/main.css">
+
+    <script src="bower_components/modernizr/modernizr.js"></script>
+
+
+    <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
+    
+    <!-- gradient stuff -->
+    <script src="gradientPicker/jquery-ui-1.8.2.custom/js/jquery-1.4.2.min.js"></script>
+    <script src="gradientPicker/jquery-ui-1.8.2.custom/js/jquery-ui-1.8.2.custom.min.js"></script>
+    <script type="text/javascript" src="scripts/farbtastic.js"></script>
+    <link rel="stylesheet" type="text/css" href="styles/gradientPicker.css">
+
+    <script type="text/javascript" src="scripts/gradientControls.js"></script>
+    <script type="text/javascript" src="scripts/gradientColorPickerAndRender.js"></script>
+
+    <script src="scripts/mandelbrotWebgl.js"></script>
+
+
+    <script  id = "shader-vs" type = "x-shader/x-vertex">
+      precision highp float;
+      attribute vec2 a_Position;
+      void main() {
+        gl_Position = vec4(a_Position.x, a_Position.y, 0.0, 1.0);
+      }
+    </script>
+    <script id = "shader-fs" type = "x-shader/x-fragment">
+      precision highp float;
+
+      uniform vec2 u_zoomCenter;
+      uniform float u_zoomSize;
+      uniform int u_maxIterations;
+
+      vec2 f(vec2 x, vec2 c) {
+        return mat2(x,-x.y,x.x)*x + c;
+      }
+      vec3 palette(float t, vec3 a, vec3 b, vec3 c, vec3 d) {
+          return a + b*cos( 6.28318*(c*t+d) );
+      }
+      void main() {
+        vec2 uv = gl_FragCoord.xy / vec2(800.0, 800.0);
+        vec2 c = u_zoomCenter + (uv * 4.0 - vec2(2.0)) * (u_zoomSize / 4.0);
+        vec2 x = vec2(0.0);
+        bool escaped = false;
+        int iterations = 0;    
+        for (int i = 0; i < 10000; i++) {
+          if (i > u_maxIterations) break;
+          iterations = i;
+          x = f(x, c);
+          if (length(x) > 2.0) {
+            escaped = true;
+            break;
+          }
+        }
+        gl_FragColor = escaped ? vec4(palette(float(iterations)/float(u_maxIterations), vec3(0.0),vec3(0.59,0.55,0.75),vec3(0.1, 0.2, 0.3),vec3(0.75)),1.0) : vec4(vec3(0.85, 0.99, 1.0), 1.0);
+      }
+    </script>
+    <script type="text/javascript">
+      $(function() {
+        setupWebGLMandelbrot();
+      });
+    </script>
+  </head>
+
+  <body>
+
+
+
+    <div class="container">
+        <h1>Mandelbrot</h1>
+        <div class="col-md-6">
+            <canvas id="myCanvas" width="500" height="500"></canvas>
+        </div>
+        <div class="col-md-6">
+            <div id="gradient-container">
+                  <div id="gradient-container">
+                      <div class="instructions">Click the gradient to add new sliders.</div>
+                      <div id="gradient-widget">
+                        <div id="gradient" style="background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgb(0, 0, 0)), to(rgb(255, 255, 255)));"></div>
+                        <div id="gradient-items"><div class="gradient-item ui-draggable selected" style="top: 0px; background-color: rgb(0, 0, 0);"><img class="pointer" src="pointer.png"><div class="delete"></div></div><div class="gradient-item ui-draggable" style="top: 201px; background-color: rgb(255, 255, 255);"><img class="pointer" src="pointer.png"><div class="delete"></div></div></div>
+                      </div>
+                      <div id="gradient-tools">
+                        <div id="colorpicker"><div class="farbtastic"><div class="color" style="background-color: rgb(255, 0, 0);"></div><div class="wheel"></div><div class="overlay"></div><div class="h-marker marker" style="left: 97px; top: 13px;"></div><div class="sl-marker marker" style="left: 147px; top: 147px;"></div></div></div>
+                        <button id="showgradient">Show CSS</button>
+                      </div>
+                      <div id="text">background: -moz-linear-gradient(rgb(0, 0, 0) 0%, rgb(255, 255, 255) 100%); <br><br>background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgb(0, 0, 0)), color-stop(100%, rgb(255, 255, 255)));</div></div>
+            </div>
+            
+            <div id=sliderHolders>
+                <h4>Max iterations</h4>
+                <div class="slider" id="maxIterations"></div>
+                <div class="sliderLabel" id="maxIterationsLabel"></div>
+            </div>
+
+            <div id="renderButton" class="btn btn-success">Render!</div>
+        </div>
+        
+    </div>
+
+  </body>
+</html>
