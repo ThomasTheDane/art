@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title>Example 01.05 - Control gui</title>
+    <script type="text/javascript" src="libs/three.js"></script>
+    <script type="text/javascript" src="libs/stats.js"></script>
+    <script type="text/javascript" src="libs/dat.gui.js"></script>
+    <script
+  src="https://code.jquery.com/jquery-3.1.1.min.js"
+  integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+  crossorigin="anonymous"></script>
+    <style>
+        body {
+            /* set margin to 0 and overflow to hidden, to go fullscreen */
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+
+<div id="Stats-output">
+</div>
+<!-- Div which will hold the Output -->
+<div id="WebGL-output">
+</div>
+
+<!-- Javascript code that runs our Three.js examples -->
+<script type="text/javascript">
+    function rgbFormatter(red, green, blue){
+        return "rgb("+red+","+green+","+blue+")";
+    }
+
+    function map(num, originalStart, originalEnd, finalStart, finalEnd){
+        return (num-originalStart)/(originalEnd-originalStart) * (finalEnd-finalStart) + finalStart;
+    }
+
+    function getGradientColor(location){
+        var gradient = [
+            {color: [255,0,0], location:0}, 
+            {color: [255,255,0], location:.25},
+            {color: [0,255,255], location:.5},
+            {color: [255,0,255], location:.75},
+            {color: [255,0,0], location:1}
+        ] 
+
+        var firstColor, secondColor;
+        if (location < gradient[0].location) {
+            return gradient[0].color;
+        }else if (location > gradient[gradient.length-1].location) {
+            return gradient[gradient.length-1].color;
+        }else{
+            $.each(gradient, function( index, value ) {
+                if(location >= value.location) {
+                    firstColor = value;
+                    secondColor = gradient[index+1]
+                    return false;
+                }
+            });
+        }
+        // console.log(firstColor, secondColor);
+        
+        var firstcolor_x = (firstColor.location/100);
+        var secondcolor_x = (secondColor.location/100)-firstcolor_x;
+        var slider_x = (location/100)-firstcolor_x;
+        var ratio = slider_x/secondcolor_x
+        //Get the color with pickHex(thx, less.js's mix function!)
+        return pickHex( secondColor.color,firstColor.color, ratio ); 
+    }
+
+    function pickHex(color1, color2, weight) {
+        var p = weight;
+        var w = p * 2 - 1;
+        var w1 = (w/1+1) / 2;
+        var w2 = 1 - w1;
+        var rgb = [Math.round(color1[0] * w1 + color2[0] * w2),
+            Math.round(color1[1] * w1 + color2[1] * w2),
+            Math.round(color1[2] * w1 + color2[2] * w2)];
+        return rgb;
+    }
+
+    function gradientPicking(location){
+        if(location < .33){
+            return new THREE.Color(3*(.33 - location), 3*location, 0)
+        }else if (location < .66){
+            return new THREE.Color(0, Math.min(1-((.33-location)*3),1), (location-.33)*3 )
+        }else{
+            return new THREE.Color(0, location, 1 - location)
+        }
+    }
+        var manyCubes = [];
+
+    // once everything is loaded, we run our Three.js stuff.
+    function init() {
+
+        var stats = initStats();
+
+        // create a scene, that will hold all our elements such as objects, cameras and lights.
+        var scene = new THREE.Scene();
+
+        // create a camera, which defines where we're looking at.
+        var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+
+        // create a render and set the size
+        var renderer = new THREE.WebGLRenderer();
+
+        renderer.setClearColor(new THREE.Color(0xEEEEEE, 1.0));
+        renderer.setSize(window.innerWidth, window.innerHeight);
+
+        // create the ground plane
+        // var planeGeometry = new THREE.PlaneGeometry(60, 20, 1, 1);
+        // var planeMaterial = new THREE.MeshLambertMaterial({color: 0xffffff});
+        // var plane = new THREE.Mesh(planeGeometry, planeMaterial);
+
+        // // rotate and position the plane
+        // plane.rotation.x = -0.5 * Math.PI;
+        // plane.position.x = 15;
+        // plane.position.y = 0;
+        // plane.position.z = 0;
+
+        // // add the plane to the scene
+        // scene.add(plane);
+
+
+        // position and point the camera to the center of the scene
+        camera.position.x = -30;
+        camera.position.y = 40;
+        camera.position.z = 30;
+        camera.lookAt(scene.position);
+
+        // add subtle ambient lighting
+        var ambientLight = new THREE.AmbientLight(0x222222);
+        scene.add(ambientLight);
+
+        // add spotlight for the shadows
+        var spotLight = new THREE.SpotLight(0xffffff);
+        spotLight.position.set(-40, 60, -10);
+        spotLight.castShadow = true;
+        scene.add(spotLight);
+
+        // add the output of the renderer to the html element
+        document.getElementById("WebGL-output").appendChild(renderer.domElement);
+
+        // call the render function
+        var step = 0;
+
+        var controls = new function () {
+            this.camerax = camera.position.x;
+            this.breathingRate = 0.01;
+            this.rotateRate = 1;
+        };
+
+        var gui = new dat.GUI();
+        gui.add(controls, 'camerax', -50, 50);
+        gui.add(controls, 'breathingRate', 0, .1);
+        gui.add(controls, 'rotateRate', 0, 5);
+
+
+        for (var i = 0; i < 100; i++) {
+            // var cubeGeometry = new THREE.BoxGeometry(20-(i/5), .2, 20-(i/5));
+            var cubeGeometry = new THREE.BoxGeometry(20, .2, 20);
+            var cubeMaterial = new THREE.MeshLambertMaterial();
+            color = getGradientColor(i/100);
+            cubeMaterial.color = new THREE.Color(color[0]/255,color[1]/255,color[2]/255);
+            
+            var cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+            cube.scale.set((100-i)/100, 1, (100-i)/100)
+            cube.position.y = (i/5);
+            cube.expanding = false;
+            scene.add(cube);
+
+            manyCubes.push(cube);
+        }
+
+
+        render();
+
+        function render() {
+            stats.update();
+            // rotate the cube around its axes
+            camera.position.x = controls.camerax;
+
+            // bounce the sphere up and down
+            // step += controls.bouncingSpeed;
+            // console.log(manyCubes);
+
+            for (var i = 0; i < manyCubes.length; i++) {
+                manyCubes[i].rotation.y += (i*controls.rotateRate)/3000;
+                // if(manyCubes[i].expanding){
+                //     manyCubes[i].scale.set(manyCubes[i].scale.x+(controls.breathingRate) ,1,manyCubes[i].scale.z + (controls.breathingRate));
+                //     if(manyCubes[i].scale.x > 1){
+                //         manyCubes[i].expanding = false;
+                //     }
+                // }else{
+                //     manyCubes[i].scale.set(manyCubes[i].scale.x-(controls.breathingRate) ,1,manyCubes[i].scale.z - controls.breathingRate);
+                //     // console.log(manyCubes[i].scale.x)
+                //     if(manyCubes[i].scale.x < 0.1){
+                //         manyCubes[i].expanding = true;
+                //     }
+                // }
+                // 
+
+            }
+            // render using requestAnimationFrame
+            requestAnimationFrame(render);
+            renderer.render(scene, camera);
+        }
+
+        function initStats() {
+
+            var stats = new Stats();
+
+            stats.setMode(0); // 0: fps, 1: ms
+            
+            // Align top-left
+            stats.domElement.style.position = 'absolute';
+            stats.domElement.style.left = '0px';
+            stats.domElement.style.top = '0px';
+
+            document.getElementById("Stats-output").appendChild(stats.domElement);
+
+            return stats;
+        }
+    }
+    window.onload = init;
+
+</script>
+</body>
+</html>
