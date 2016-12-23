@@ -1,7 +1,7 @@
 function setupWebGLMandelbrot() {
   /* locate the canvas element */
   console.log("setting up webgl mandel");
-  var canvas_element = document.getElementById("maincanvas");
+  var canvas_element = document.getElementById("myCanvas");
   
   /* obtain a webgl rendering context */
   var gl = canvas_element.getContext("webgl");
