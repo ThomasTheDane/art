@@ -41,7 +41,22 @@ function setupWebGLMandelbrot() {
   var zoom_center_uniform = gl.getUniformLocation(mandelbrot_program, "u_zoomCenter");
   var zoom_size_uniform = gl.getUniformLocation(mandelbrot_program, "u_zoomSize");
   var max_iterations_uniform = gl.getUniformLocation(mandelbrot_program, "u_maxIterations");
-  
+  var color_array_uniform = gl.getUniformLocation(mandelbrot_program, "u_colors");
+  var color_locations_uniform = gl.getUniformLocation(mandelbrot_program, "u_color_locations"); 
+
+  // gradientColorBuffer = gl.createBuffer();
+  // gl.bindBuffer(gl.ARRAY_BUFFER, gradientColorBuffer);
+  // var colors = [
+  //       1.0, 0.0, 0.0, 1.0,
+  //       0.0, 1.0, 0.0, 1.0,
+  //       0.0, 0.0, 1.0, 1.0,
+  //       1.0, 0.0, 0.0, 1.0,
+  // ];
+  // gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
+  // gradientColorBuffer.itemSize = 4;
+  // gradientColorBuffer.numItems = 4;
+
+
   /* these hold the state of zoom operation */
   var zoom_center = [0.0, 0.0];
   var target_zoom_center = [0.0, 0.0];
@@ -57,6 +72,26 @@ function setupWebGLMandelbrot() {
     gl.uniform2f(zoom_center_uniform, zoom_center[0], zoom_center[1]);
     gl.uniform1f(zoom_size_uniform, zoom_size);
     gl.uniform1i(max_iterations_uniform, max_iterations);
+
+    // flatten color array 
+    gradient = getGradientColorsFromPicker();
+    var flattenedGradient = [];
+    for (var i = 0; i < gradient.length; i++) {
+      flattenedGradient = flattenedGradient.concat(gradient[i].color); 
+    }
+    // console.log(flattenedGradient);
+    gl.uniform3fv(color_array_uniform, flattenedGradient)
+
+    var locations = [];
+    for (var i = 0; i < gradient.length; i++) {
+      locations.push(gradient[i].location)
+    }
+    for (var i = gradient.length; i < 50; i++){
+      locations.push([-1.0]);
+    }
+    // console.log(locations);
+    gl.uniform1fv(color_locations_uniform, locations)
+
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT);
     gl.drawArrays(gl.TRIANGLES, 0, 3);
