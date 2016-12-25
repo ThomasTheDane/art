@@ -78,18 +78,21 @@ function setupWebGLMandelbrot() {
     var flattenedGradient = [];
     for (var i = 0; i < gradient.length; i++) {
       flattenedGradient = flattenedGradient.concat(gradient[i].color); 
+      // console.log("gradient color: ", gradient[i].color)
     }
     // console.log(flattenedGradient);
     gl.uniform3fv(color_array_uniform, flattenedGradient)
 
     var locations = [];
     for (var i = 0; i < gradient.length; i++) {
-      locations.push(gradient[i].location)
+      locations.push(parseInt(gradient[i].location)/100.0)
     }
     for (var i = gradient.length; i < 50; i++){
-      locations.push([-1.0]);
+      locations.push(-1.0);
     }
-    // console.log(locations);
+
+    // console.log("Locations: ", locations);
+    // console.log("gradient: ", gradient);
     gl.uniform1fv(color_locations_uniform, locations)
 
     gl.clearColor(0.0, 0.0, 0.0, 1.0);

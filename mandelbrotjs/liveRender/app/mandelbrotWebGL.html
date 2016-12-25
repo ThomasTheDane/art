@@ -68,20 +68,38 @@
       vec2 f(vec2 x, vec2 c) {
         return mat2(x,-x.y,x.x)*x + c;
       }
-      vec3 palette(float t, vec3 colors[50]) {
-        // int numColor;
-        // for(int i = 0; i < 50; i++){
-        //   if(u_color_locations[i] == -1.0){
-        //     numColor = i + 1;
-        //     break;
-        //   }
-        // }
+      vec3 palette(float location, vec3 colors[50], float locations[50]) {
+        int numColors;
+        for(int i = 0; i < 50; i++){
+          if(locations[i] == -1.0){
+            numColors = i + 1;
+            break;
+          }
+        }
 
-        // vec3 color1;
-        // vec3 color2;
-        // if (location < u_color_locations[0]){
-        //   return u_colors
+        vec3 firstColor;
+        vec3 secondColor;
+        // if (location < locations[0]){
+        //   return colors[0];
         // }
+        // if(location > locations[numColors-1]){
+        //   return colors[numColors-1];
+        // }
+        
+        for(int i = 0; i < 50; i++){
+          if(location > locations[i]){
+            firstColor = colors[i];
+            secondColor = colors[i+1];
+            float slider_x = location - locations[i];
+            float ratio = slider_x / locations[i+1];
+            return mix(firstColor, secondColor, ratio);
+
+            break;
+          }
+        }
+        // firstColor = colors[0];
+        // secondColor = colors[1];
+
 
         // return u_colors[0];
 
@@ -99,11 +117,11 @@
         // //     });
         // // }
 
-        float x = 1.0 / 3.0;
-        if (t < x) return mix(colors[0], colors[1], t/x);
-        else if (t < 2.0 * x) return mix(colors[1], colors[2], (t - x)/x);
-        else if (t < 3.0 * x) return mix(colors[2], colors[3], (t - 2.0*x)/x);
-        return colors[3];
+        // float x = 1.0 / 3.0;
+        // if (location < x) return mix(colors[0], colors[1], location/x);
+        // else if (location < 2.0 * x) return mix(colors[1], colors[2], (location - x)/x);
+        // else if (location < 3.0 * x) return mix(colors[2], colors[3], (location - 2.0*x)/x);
+        // return colors[3];
         // return a + b*cos( 6.28318*(c*t+d) );
       }
       void main() {
@@ -121,7 +139,7 @@
             break;
           }
         }
-        gl_FragColor = escaped ? vec4(palette(float(iterations)/float(u_maxIterations), u_colors),1.0) 
+        gl_FragColor = escaped ? vec4(palette(float(iterations)/float(u_maxIterations), u_colors, u_color_locations),1.0) 
                                 : vec4(vec3(0.0, 0.0, 0.0), 1.0);
       }
     </script>
