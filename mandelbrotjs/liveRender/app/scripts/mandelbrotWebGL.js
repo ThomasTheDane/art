@@ -1,3 +1,5 @@
+var renderFrame;
+
 function setupWebGLMandelbrot() {
   /* locate the canvas element */
   console.log("setting up webgl mandel");
@@ -48,7 +50,9 @@ function setupWebGLMandelbrot() {
   var zoom_factor = 1.0;
   var max_iterations = 500;
     
-  var renderFrame = function () {
+  renderFrame = function () {
+    max_iterations = $("#maxIterations").slider("value");
+
     /* bind inputs & render frame */
     gl.uniform2f(zoom_center_uniform, zoom_center[0], zoom_center[1]);
     gl.uniform1f(zoom_size_uniform, zoom_size);
@@ -60,8 +64,8 @@ function setupWebGLMandelbrot() {
     /* handle zoom */
     if (!stop_zooming) { /* zooming in progress */
       /* gradually decrease number of iterations, reducing detail, to speed up rendering */
-      max_iterations -= 10;
-      if (max_iterations < 50) max_iterations = 50;
+      // max_iterations -= 10;
+      // if (max_iterations < 50) max_iterations = 50;
       
       /* zoom in */
       zoom_size *= zoom_factor;
@@ -71,11 +75,11 @@ function setupWebGLMandelbrot() {
       zoom_center[1] += 0.1 * ( target_zoom_center[1] - zoom_center[1]);
 
       window.requestAnimationFrame(renderFrame);
-    } else if (max_iterations < 500) {
+    } //else if (max_iterations < 500) {
         /* once zoom operation is complete, bounce back to normal detail level */
-        max_iterations += 10;
-        window.requestAnimationFrame(renderFrame);
-    }
+        // max_iterations += 10;
+        // window.requestAnimationFrame(renderFrame);
+    //}
   }
    
   /* input handling */
@@ -94,4 +98,26 @@ function setupWebGLMandelbrot() {
   
   /* display initial frame */
   renderFrame(); 
+}
+
+
+function Slider(id, maxVal){
+  console.log("setting up slider: ", id);
+  function changeSlider(){
+    // alert($(id).slider("value"))
+    $(id + "Label").html($(id).slider("value"))
+
+  }
+  function slideSlider(){
+    renderFrame();
+    $(id + "Label").html($(id).slider("value"))
+  }
+  $( id ).slider({
+      orientation: "horizontal",
+      range: "min",
+      max: maxVal,
+      value: maxVal / 2,
+      change: changeSlider,
+      slide: slideSlider
+    });
 }

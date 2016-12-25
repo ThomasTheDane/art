@@ -2,6 +2,7 @@
 
         $(function() {
           $(document).ready(function() {
+            console.log("gradient controls ready");
             $('#colorpicker').farbtastic(setColor);
           });
           
