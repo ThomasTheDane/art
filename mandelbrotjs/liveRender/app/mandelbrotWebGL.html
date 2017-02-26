@@ -16,8 +16,6 @@
     <!-- endbuild -->
 
     <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
-
-
     
     <link rel="stylesheet" href="styles/farbtastic.css" type="text/css">
     <link type="text/css" href="gradientPicker/jquery-ui-1.8.2.custom/css/ui-lightness/jquery-ui-1.8.2.custom.css" rel="stylesheet" />  
@@ -72,9 +70,9 @@
         int numColors;
         for(int i = 0; i < 50; i++){
           if(locations[i] == -1.0){
-            numColors = i + 1;
             break;
           }
+          numColors = i + 1;
         }
 
         vec3 firstColor;
@@ -85,13 +83,14 @@
         // if(location > locations[numColors-1]){
         //   return colors[numColors-1];
         // }
-        
-        for(int i = 0; i < 50; i++){
-          if(location > locations[i]){
+
+        for(int i = 0; i < 49; i++){
+          if(location >= locations[i] && location < locations[i+1]){
             firstColor = colors[i];
             secondColor = colors[i+1];
+            // location - locations[i]
             float slider_x = location - locations[i];
-            float ratio = slider_x / locations[i+1];
+            float ratio = slider_x / (locations[i+1] - locations[i]);
             return mix(firstColor, secondColor, ratio);
 
             break;
@@ -125,7 +124,7 @@
         // return a + b*cos( 6.28318*(c*t+d) );
       }
       void main() {
-        vec2 uv = gl_FragCoord.xy / vec2(800.0, 800.0);
+        vec2 uv = gl_FragCoord.xy / vec2(500.0, 500.0);
         vec2 c = u_zoomCenter + (uv * 4.0 - vec2(2.0)) * (u_zoomSize / 4.0);
         vec2 x = vec2(0.0);
         bool escaped = false;
@@ -139,8 +138,12 @@
             break;
           }
         }
+
         gl_FragColor = escaped ? vec4(palette(float(iterations)/float(u_maxIterations), u_colors, u_color_locations),1.0) 
                                 : vec4(vec3(0.0, 0.0, 0.0), 1.0);
+
+        // gl_FragColor = escaped ? vec4(palette(gl_FragCoord.x / 500.0, u_colors, u_color_locations),1.0) 
+                                // : vec4(vec3(0.0, 0.0, 0.0), 1.0);
       }
     </script>
     

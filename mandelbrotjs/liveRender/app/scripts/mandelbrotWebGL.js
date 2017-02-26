@@ -75,11 +75,22 @@ function setupWebGLMandelbrot() {
 
     // flatten color array 
     gradient = getGradientColorsFromPicker();
+
+    if(gradient[0].location > 0){
+      var bookend = Object.assign({}, gradient[0]);
+      bookend.location = 0;
+      gradient.unshift(bookend)
+    }
+
     var flattenedGradient = [];
     for (var i = 0; i < gradient.length; i++) {
       flattenedGradient = flattenedGradient.concat(gradient[i].color); 
       // console.log("gradient color: ", gradient[i].color)
     }
+    for (var i = 0; i < flattenedGradient.length; i++) {
+      flattenedGradient[i] = flattenedGradient[i] / 255.0;
+    }
+
     // console.log(flattenedGradient);
     gl.uniform3fv(color_array_uniform, flattenedGradient)
 
@@ -91,8 +102,9 @@ function setupWebGLMandelbrot() {
       locations.push(-1.0);
     }
 
-    // console.log("Locations: ", locations);
-    // console.log("gradient: ", gradient);
+
+    console.log("Locations: ", locations);
+    console.log("flattened gradient: ", flattenedGradient);
     gl.uniform1fv(color_locations_uniform, locations)
 
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
