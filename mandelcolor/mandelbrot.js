@@ -49,9 +49,16 @@ class Mandelbrot{
         }
     }
 
+    updateMandelbrotGradient(newGradient){
+        this.drawMandebrotlOnCanvas(this.canvas, this.maxIterations, newGradient);
+    }
+
     drawMandebrotlOnCanvas(canvas, maxIterations, gradient = new Gradient()){
         this.computeMandelbrot({maxIterations: maxIterations});
-        var context = canvas.getContext("2d");
+        this.canvas = canvas;
+        this.maxIterations = maxIterations;
+
+        let context = canvas.getContext("2d");
         for (let j = 0; j < this.height; j++) {
             for (let i = 0; i < this.width; i++) {
                 if(this.depth[i][j] == maxIterations){

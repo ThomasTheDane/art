@@ -1,3 +1,7 @@
 #mainCanvas{
     border: 1px solid black;
 }
+
+#gradientTool{
+    margin-top: 20px;
+}
