@@ -1,0 +1,24 @@
+<html>
+<header>
+    <link rel="stylesheet" href="style.css" type="text/css">
+</header>
+<body>
+    <canvas id="mainCanvas" width="750" height="500"></canvas>
+    <script src="mandelbrot.js"></script>
+    <script src="gradient.js"></script>
+    <script>
+
+        let color1 = [255, 0, 0];
+        let color2 = [0, 255, 0];
+        let color3 = [0, 0, 255];
+        let aGradient = new Gradient([{color:color1, position:0.0}, {color:color2, position:.5}, {color: color3, position:1.0}]);
+
+        // aGradient.drawGradientOnCanvas(document.getElementById("mainCanvas"));
+        
+        let mandelbrot = new Mandelbrot(750, 500, {xmin: -2, xmax: 1, ymin: -1, ymax:1});
+        mandelbrot.drawMandebrotlOnCanvas(document.getElementById("mainCanvas"), 500, aGradient);
+
+        
+    </script>
+</body>
+</html>
