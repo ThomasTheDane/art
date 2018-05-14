@@ -8,17 +8,19 @@
     <script src="mandelbrot.js"></script>
     <script src="gradient.js"></script>
     <script src="gradientTool.js"></script>
+    <script src="mandelbrotControls.js"></script>
     <script>
 
-        let color1 = [255, 0, 0];
-        let color2 = [0, 255, 0];
-        let color3 = [0, 0, 255];
+        let color1 = [1.0, 0.0, 0.0];
+        let color2 = [0.0, 1.0, 0.0];
+        let color3 = [0.0, 0.0, 1.0];
         let aGradient = new Gradient([{color:color1, position:0.0}, {color:color2, position:.5}, {color: color3, position:1.0}]);
         
         let mandelbrot = new Mandelbrot(750, 500, {xmin: -2, xmax: 1, ymin: -1, ymax:1});
-        mandelbrot.drawMandebrotlOnCanvas(document.getElementById("mainCanvas"), 500, aGradient);
+        let mandelbrotControls = new MandelbrotControls(mandelbrot, document.getElementById("mainCanvas"))
+        mandelbrotControls.drawMandebrot(aGradient);
 
-        let gradientTool = new GradientTool(aGradient, document.getElementById("gradientTool"), mandelbrot);
+        let gradientTool = new GradientTool(aGradient, document.getElementById("gradientTool"), mandelbrotControls);
     </script>
 </body>
 </html>

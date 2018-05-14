@@ -1,10 +1,10 @@
 const colorPickerWidth = 15;
 
 class GradientTool {
-    constructor(startingGradient, canvas, mandelbrot) {
+    constructor(startingGradient, canvas, mandelbrotControls) {
         this.gradient = startingGradient;
         this.canvas = canvas;
-        this.mandelbrot = mandelbrot;
+        this.mandelbrotControls = mandelbrotControls;
 
         this.context = canvas.getContext("2d");
 
@@ -47,7 +47,7 @@ class GradientTool {
             }
 
             self.selectedColor = null;
-            self.mandelbrot.updateMandelbrotGradient(self.gradient);
+            self.mandelbrotControls.updateMandelbrotGradient(self.gradient);
 
         }
     }

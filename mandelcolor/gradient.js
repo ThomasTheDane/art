@@ -1,5 +1,5 @@
 class Gradient{
-    constructor(gradientColors = [{color:[255, 255, 255], position: 0.0}, {color:[0, 0, 0], position: 1.0}]){
+    constructor(gradientColors = [{color:[1.0, 1.0, 1.0], position: 0.0}, {color:[0.0, 0.0, 0.0], position: 1.0}]){
         if(gradientColors[0].position != 0 || gradientColors[gradientColors.length - 1].position != 1.0){
             throw "Error: gradient must have element positioned at 0 and 1"
         }
@@ -47,7 +47,7 @@ class Gradient{
     }
 
     rgbString(color){
-        return `rgb(${Math.round(color[0])}, ${Math.round(color[1])}, ${Math.round(color[2])})`;
+        return `rgb(${Math.round(color[0]*255)}, ${Math.round(color[1]*255)}, ${Math.round(color[2] * 255)})`;
         
     }
 }
