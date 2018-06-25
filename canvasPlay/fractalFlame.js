@@ -1,4 +1,4 @@
-let functions = [
+let triangleFunctions = [
     function(point){
         return [(point[0]/2), (point[1]/2)];
     },
@@ -14,11 +14,9 @@ for (let i = 0; i < 1000; i++) {
     let point = [(Math.random()) * 2 - 1, (Math.random()) * 2 - 1]
 
     for (let j = 0; j < 100; j++) {       
-        let func = functions[getRandomInt(3)];
+        let func = triangleFunctions[getRandomInt(3)];
         point = func(point);
-        if(i == 50){
-            console.log(point)
-        }
+
         if(j > 20){ 
             paintPointToCanvas(point, canvas);
         }
@@ -41,3 +39,7 @@ function paintPointToCanvas(point, canvas){
 function getRandomInt(max) {
     return Math.floor(Math.random() * Math.floor(max));
   }
+
+
+  //todos
+  //probability weights to functions 

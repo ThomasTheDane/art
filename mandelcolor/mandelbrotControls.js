@@ -6,7 +6,7 @@ class MandelbrotControls{
         this.mandelbrot = mandelbrot;
         this.canvas = canvas;
 
-        this.coloringMethod = "basic";
+        this.coloringMethod = "smooth";
     }
 
     updateMandelbrot(gradient ){
@@ -32,10 +32,38 @@ class MandelbrotControls{
                 }
             }
         }
+        if(this.coloringMethod == "smooth"){
+            this.mandelbrot.computeSmoothMandelbrot();
+            let context = this.canvas.getContext("2d");
+
+            for (let j = 0; j < this.mandelbrot.height; j++) {
+
+                for (let i = 0; i < this.mandelbrot.width; i++) {
+                    
+                    if(this.mandelbrot.depth[i][j] == this.mandelbrot.maxIterations){
+                        context.fillStyle = `rgb(0, 0, 0)`;
+                    }else{
+                        context.fillStyle = gradient.rgbString(gradient.getColor(this.mandelbrot.depth[i][j] / (this.mandelbrot.maxIterations + 20)));                            
+                    }
+                    context.fillRect(i, j, 1, 1);
+
+                }
+
+            }
+
+            // if ( iteration < max_iteration ) {
+            //     log_zn = log( x*x + y*y ) / 2;
+            //     nu = log( log_zn / log(2) ) / log(2);
+            //     this.depth = this.depth + 1 - nu; 
+            // }
+        }
         if(this.coloringMethod == "histogram"){
             this.mandelbrot.computeMandelbrotWithHistogram();
             let context = this.canvas.getContext("2d");
-            let total = this.mandelbrot.histogram.reduce(function(acc, val) { return acc + val; });
+            let total = 0;
+            for(let i = 0; i < this.mandelbrot.maxIterations; i++){
+                total += this.mandelbrot.histogram[i];
+            }
 
             for (let j = 0; j < this.mandelbrot.height; j++) {
                 for (let i = 0; i < this.mandelbrot.width; i++) {
@@ -44,6 +72,8 @@ class MandelbrotControls{
                     if(this.mandelbrot.depth[i][j] == this.mandelbrot.maxIterations){
                         context.fillStyle = `rgb(0, 0, 0)`;
                     }else{
+                        // context.fillStyle = gradient.rgbString(gradient.getColor(this.mandelbrot.depth[i][j] / this.mandelbrot.maxIterations)) //`rgb(${this.depth[i][j]}, ${this.depth[i][j]}, ${this.depth[i][j]})`;
+
                         for(let k = 0; k < this.mandelbrot.depth[i][j]; k++){
                             hue += this.mandelbrot.histogram[k] / total;
                             context.fillStyle = gradient.rgbString(gradient.getColor(hue)) 
@@ -53,5 +83,7 @@ class MandelbrotControls{
                 }
             }
         }
+
+        console.log("done rendering");
     }
 }
