@@ -24,23 +24,23 @@
 // ];
 
 //todo change to transform
-function pickVariation(variations){
-    //sum weight. Note these are the weights of each variation, not the weight of the transform 
-    let totalWeight = variations[0].weight;
-    let cummuWeights = [variations[0].weight];
+function pickTransform(transforms){
+    //sum weights of each transform 
+    let totalWeight = transforms[0].weight;
+    let cummuWeights = [transforms[0].weight];
 
-    for (let i = 1; i < variations.length; i++) {
-        cummuWeights.push(variations[i].weight + cummuWeights[i-1])
-        totalWeight += variations[i].weight;
+    for (let i = 1; i < transforms.length; i++) {
+        cummuWeights.push(transforms[i].weight + cummuWeights[i-1])
+        totalWeight += transforms[i].weight;
     }
 
     //generate rand float with max of sum weights 
     let pickedNum = Math.random() * totalWeight;
 
-    //iterate through weight to see where num falls 
-    if(pickedNum < variations[0].weight) return variations[0];
-    for(let i = 1; i < variations.length; i++){
-        if(pickedNum > variations[i - 1].weight && pickedNum < cummuWeights[i]) return variations[i]
+    //iterate through weights to see where num falls 
+    if(pickedNum < transforms[0].weight) return transforms[0];
+    for(let i = 1; i < transforms.length; i++){
+        if(pickedNum > transforms[i - 1].weight && pickedNum < cummuWeights[i]) return transforms[i]
     }
 }
 
@@ -50,7 +50,7 @@ allVariations = {
     }
 }
 
-transform1 = {  variations: [{name: 'linear', weight:1.0},
+transform1 = {  variations: [{name: 'linear', value:1.0},
                             ],
                 params: {a: 0.5,
                          b: 0,
@@ -58,9 +58,10 @@ transform1 = {  variations: [{name: 'linear', weight:1.0},
                          d: 0,
                          e: 0.5,
                          f: 0
-                        }
+                        },
+                weight: 1.0
              };
-transform2 = {  variations: [{name: 'linear', weight:1.0},
+transform2 = {  variations: [{name: 'linear', value:1.0},
                             ],
                 params: {a: 0.5,
                          b: 0,
@@ -68,10 +69,11 @@ transform2 = {  variations: [{name: 'linear', weight:1.0},
                          d: 0,
                          e: 0.5,
                          f: 0
-                        }
+                        },
+                weight: 1.0
              };
 
-transform3 = {  variations: [{name: 'linear', weight:1.0},
+transform3 = {  variations: [{name: 'linear', value:1.0},
                             ],
                 params: {a: 0.5,
                          b: 0,
@@ -79,50 +81,34 @@ transform3 = {  variations: [{name: 'linear', weight:1.0},
                          d: 0,
                          e: 0.5,
                          f: 0.5
-                        }
+                        },
+                weight: 1.0
 };
 
-// transforms = [transform1, transform2, transform3];
-// function dumbIFS(){
-//     for(let i = 0; i < 10; i++){
-//         let point = [(Math.random()) * 2 - 1, (Math.random()) * 2 - 1]
-//         let point2 = point;
-        
-//         for(let j = 0; j < 50; j++){
-//             console.log("before: ", point, point2);
-//             let chosen = getRandomInt(3);
-//             let func = triangleFunctions[chosen];
-//             point = func(point);
-            
-//             let transform = transforms[chosen];
-//             point2 =  [(transform.params.a * point2[0]) + (transform.params.b * point2[1]) + (transform.params.c), 
-//                        (transform.params.d * point2[0]) + (transform.params.e * point2[1]) + (transform.params.f) ];
-
-            
-//             console.log("funcs: ", func, transform.params);
-//             console.log("after: ", point, point2);
-
-//             if(j > 20){
-//                 // paintPointToCanvas({x: point[0], y: point[1]});
-//                 paintPointToCanvas({x: point2[0], y: point2[1]});
-//             }
-//         }
-//     }
-// }
-
 function IFS(point, transforms){
-    for (let j = 0; j < 500; j++) {       
+    for (let j = 0; j < 100; j++) {       
 
         //need to randomly pick a transform
-        let transform = randomItem(transforms);
-
-        //todo: we need to sum all of the variations of each transform and multiply each variation function result by the weight of the variation
-        // let func = allVariations[pickVariation(transform.variations).name]; 
+        let transform = pickTransform(transforms);
 
         //we morph the point based on params and put it through the chosen function 
-        point =  {x: (transform.params.a * point.x) + (transform.params.b * point.y) + (transform.params.c), 
-                  y: (transform.params.d * point.x) + (transform.params.e * point.y) + (transform.params.f) };
-        // point = func(point);
+        morphedPoint =  {x: (transform.params.a * point.x) + (transform.params.b * point.y) + (transform.params.c), 
+                         y: (transform.params.d * point.x) + (transform.params.e * point.y) + (transform.params.f) };
+        
+        //apply all the variations and sum them with the appropriate weight 
+        point = {x: 0, y: 0};
+        for(aVariation of transform.variations){
+            //get the variation function 
+            let func = allVariations[aVariation.name];
+
+            //get the single point output of the function 
+            let funcOutput = func(morphedPoint);
+
+            //multiply by the variations value / weight piece by piece and sum across all variations 
+            point.x += aVariation.value * funcOutput.x;
+            point.y += aVariation.value * funcOutput.y;
+        }
+        
 
         if(j > 20){ 
             paintPointToCanvas(point);
@@ -164,4 +150,3 @@ function drawAndCalculateFlame(transforms){
 drawAndCalculateFlame([transform1, transform2, transform3]);
 // dumbIFS();
   //todos
-  //probability weights to transforms  
