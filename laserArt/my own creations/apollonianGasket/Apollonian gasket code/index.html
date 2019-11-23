@@ -44,7 +44,7 @@
   window.onload = function () {
 
     let svgCircles = [];
-    drawCircles("multiply");
+    drawCircles("linear");
 
 
     function drawCircles(type) {
@@ -56,6 +56,9 @@
           var svgDraw = SVG().addTo('body').size(10000, 1000)
           let displacement = 0;
           for (var offset = 0; offset < 200; offset += 40) {
+            var boundingCircle = svgDraw.circle((810)).fill('#f06').move(-10 + displacement, - 10);
+            boundingCircle.fill({ color: '#f06', opacity: 0.3 })
+            boundingCircle.stroke({ color: '#f06', opacity: 0.6, width: 5 })
             for (aCricle of circles) {
               // console.log(aCricle);
 
@@ -76,6 +79,9 @@
           let displacement = 0;
 
           for (var offset = 1.0; offset > 0; offset -= .1) {
+            var boundingCircle = svgDraw.circle((810)).fill('#f06').move(-10 + displacement, - 10);
+            boundingCircle.fill({ color: '#f06', opacity: 0.3 })
+            boundingCircle.stroke({ color: '#f06', opacity: 0.6, width: 5 })
             for (let i = 0; i < circles.length; i++) {
               aCricle = circles[i];
               // console.log(aCricle);
