@@ -18,6 +18,7 @@ class MandelbrotControls{
     }
 
     drawMandebrot(gradient = new Gradient()){
+        let timeAtRenderStart = Date.now();
         if(this.coloringMethod == "basic"){
             this.mandelbrot.computeMandelbrot();
             let context = this.canvas.getContext("2d");
@@ -84,6 +85,6 @@ class MandelbrotControls{
             }
         }
 
-        console.log("done rendering");
+        console.log(`Finished rendering in ${this.coloringMethod} style at [${this.mandelbrot.maxIterations}] iterations, taking [${Date.now() - timeAtRenderStart}] miliseconds`);
     }
 }

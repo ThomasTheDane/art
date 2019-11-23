@@ -50,10 +50,12 @@ class Mandelbrot{
     }
 
     computeMandelbrotWithHistogram(){
+        //initialize the histogram array 
         this.histogram = new Array(this.maxIterations - 1);
         for (let i = 0; i < this.maxIterations; i++) {
             this.histogram[i] = 0;
         }
+
         console.log(`max iterationsmax: ${this.maxIterations}`);
         var dx = (this.xmax - this.xmin) / this.width;
         var dy = (this.ymax - this.ymin)/ this.height;
@@ -90,6 +92,7 @@ class Mandelbrot{
         for (let i = 0; i < this.maxIterations; i++) {
             this.histogram[i] = 0;
         }
+
         console.log(`max iterationsmax: ${this.maxIterations}`);
         let dx = (this.xmax - this.xmin) / this.width;
         let dy = (this.ymax - this.ymin)/ this.height;
@@ -128,4 +131,6 @@ class Mandelbrot{
             y += dy;
         }        
     }
+
+    
 }

@@ -1,0 +1,110 @@
+<head>
+  <link rel="stylesheet" href="style.css" type="text/css">
+</head>
+<div class="container">
+  <h1>Apollonian gasket</h1>
+
+  <canvas width="400" height="400"></canvas>
+  <div id="drawing"></div>
+
+  <div class="btns">
+    <button class="btn is-selected" data-set="symmetric">symmetric</button>
+    <button class="btn" data-set="asymmetric">asymmetric</button>
+    <button class="btn" data-set="nested">nested</button>
+  </div>
+
+  <h2>The Kiss Precise</h2>
+  <blockquote>
+    <p class="content">
+      For pairs of lips to kiss maybe <br />
+      Involves no trigonometry. <br />
+      'Tis not so when four circles kiss <br />
+      Each one the other three.
+    </p>
+
+    <footer>
+      — <cite><a href="https://en.wikipedia.org/wiki/Frederick_Soddy#Descartes.27_theorem" target="_blank">Frederick
+          Soddy</a></cite>
+    </footer>
+  </blockquote>
+
+  <h2>Sources</h2>
+  <ul class="reading-list js-reading-list"></ul>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/svg.js/3.0.13/svg.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.19.0/TweenMax.min.js"></script>
+<script src="https://rawgit.com/infusion/Complex.js/master/complex.js"></script>
+
+<!-- <script src="fileToolbox.js"></script> -->
+<script src="calcGasket.js"></script>
+
+<script>
+
+  window.onload = function () {
+
+    let svgCircles = [];
+    drawCircles("multiply");
+
+
+    function drawCircles(type) {
+      const svgMultiply = 2;
+      if (SVG) {
+        // linear offset 
+        if (type === "linear") {
+
+          var svgDraw = SVG().addTo('body').size(10000, 1000)
+          let displacement = 0;
+          for (var offset = 0; offset < 200; offset += 40) {
+            for (aCricle of circles) {
+              // console.log(aCricle);
+
+              var rect = svgDraw.circle((svgMultiply * aCricle.r * 2 - 3) - offset - 10).fill('#f06').move((svgMultiply * (aCricle.center.re - (aCricle.r / 1) + (offset / 4)) + displacement), (svgMultiply * (aCricle.center.im - (aCricle.r / 1) + (offset / 4))));
+              svgCircles.push(rect);
+              rect.fill({ color: '#f06', opacity: 0.3 })
+              rect.stroke({ color: '#f06', opacity: 0.6, width: 5 })
+            }
+            displacement += 1000;
+          }
+          console.log(svgDraw.svg());
+
+        }
+        if (type === "multiply") {
+
+          //multiply offset 
+          var svgDraw = SVG().addTo('body').size(10000, 1000)
+          let displacement = 0;
+
+          for (var offset = 1.0; offset > 0; offset -= .1) {
+            for (let i = 0; i < circles.length; i++) {
+              aCricle = circles[i];
+              // console.log(aCricle);
+              // var offset = 15;
+              // console.log(`Centerx: ${aCricle.center.re}, centery:${aCricle.center.im}, radius:${aCricle.r}`)
+
+              if (aCricle.r > 1) {
+                var rect = svgDraw.circle((svgMultiply * aCricle.r * 2 - 3) * offset - 8).fill('#f06').move((svgMultiply * (aCricle.center.re) - (((svgMultiply * aCricle.r * 2) * offset) / 2) + displacement), (svgMultiply * (aCricle.center.im) - (((svgMultiply * aCricle.r * 2) * offset) / 2)));
+                svgCircles.push(rect);
+
+                rect.fill({ color: '#f06', opacity: 0.3 })
+                rect.stroke({ color: '#f06', opacity: 0.6, width: 5 })
+              }
+
+            }
+            displacement += 1000;
+          }
+          console.log(svgDraw.svg());
+
+        }
+      }
+    }
+  }
+
+</script>
+
+<!-- 
+  
+  TODO
+  See if I can radially move over the circles so that they align to the edge of the circles 
+
+-->

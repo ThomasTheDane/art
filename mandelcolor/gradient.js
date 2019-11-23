@@ -26,6 +26,15 @@ class Gradient{
         return this.mixColors(color2, color1, ratio);
     }
 
+    addColor(newColor){
+        for(let i = 0; i < this.colors.length - 1; i++){
+            if(newColor.position > this.colors[i].position && newColor.position < this.colors[i+1].position){
+                this.colors.splice(i+1, 0, newColor);
+                return;
+            }
+        }
+    }
+
     mixColors(color1, color2, ratio){
         let antiRatio = 1 - ratio;
         let mix = [(color1[0] * ratio) + (color2[0] * antiRatio),

@@ -1,0 +1,83 @@
+::selection {
+    color: #fff;
+    background: #28a2a2;
+  }
+  
+  ::-moz-selection {
+    color: #fff;
+    background: #28a2a2;
+  }
+  
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+  }
+  
+  body {
+    font-family: 'Raleway', sans-serif;
+  }
+  
+  .container {
+    width: 600px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  
+  h1,
+  h2 {
+    margin-top: 3rem;
+    font-weight: normal;
+  }
+  
+  a {
+    color: #28a2a2;
+  }
+  a:hover {
+    color: #1e7979;
+    text-decoration: none;
+  }
+  
+  blockquote {
+    display: inline-block;
+    margin-top: 0;
+    padding-left: 1rem;
+    font-style: italic;
+    line-height: 1.6;
+    border-left: 4px solid #d4f5f5;
+  }
+  blockquote .content {
+    margin-top: 0;
+  }
+  
+  canvas {
+    margin-bottom: 1rem;
+  }
+  
+  .btn {
+    display: inline-block;
+    margin: 0 0.2rem;
+    padding: 0.3rem;
+    background: none;
+    border: 1px solid #bfbfbf;
+    color: #585858;
+  }
+  .btn:hover, .btn.is-selected {
+    color: #28a2a2;
+    border-color: #28a2a2;
+  }
+  
+  .reading-list {
+    padding: 0;
+    list-style-type: none;
+    font-size: 0.9rem;
+    text-align: left;
+  }
+  .reading-list li {
+    margin-bottom: 0.5rem;
+    width: 600px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  

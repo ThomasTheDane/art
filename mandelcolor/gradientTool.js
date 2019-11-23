@@ -53,9 +53,38 @@ class GradientTool {
         this.canvas.onmouseup = function(e){
             self.isMouseDown = false;
 
+            if(!self.selectedColor){
+                console.log("Adding new color to gradient");
+
+                // Get the position of the mouse along the gradient 
+                let newColorPosition = e.offsetX / self.canvas.width;
+
+                // TODO: pull up the color picker instead of just adding black 
+
+                // Add the color to the gradient at position 
+                self.gradient.addColor({color:[0.0,0.0,0.0], position: newColorPosition});
+
+                // Destroy the existing color picker 
+                for (const aColor of self.gradient.colors) {
+                    if(aColor.input){
+                        aColor.input.parentNode.removeChild(aColor.input);
+                    }
+                }
+
+                // Re-instantiate color pickers 
+                self.instantiateColorPickers();
+
+                // Redraw the gradient 
+                self.drawGradientAndColors();
+
+                console.log("added color! ")
+
+                return; 
+            }
+
             if(!self.mouseMoved){
                 console.log("pick that color! ");
-                self.selectedColor.picker.show();
+                self.selectedColor.picker.show();  
             }else{
                 self.mandelbrotControls.updateMandelbrotGradient(self.gradient);
             }
